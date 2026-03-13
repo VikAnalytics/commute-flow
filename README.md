@@ -15,6 +15,10 @@ This repo now supports live Google APIs (Places + Directions) with mock fallback
 - Split-screen layout:
   - Top: interactive `MapKit` map with route polylines.
   - Bottom: scrollable property cards with pricing, commute, and CTA button.
+- Card-first journey UX:
+  - Listings are compact by default (estimated travel time only).
+  - Tap a card to expand full transit journey details.
+  - Journey details include transit line/number, vehicle type, and (when available) headsign + departure/arrival stop names.
 - Apartment screen:
   - Workplace field prefilled with `NCR Headquarters, Spring St NW`.
   - Mock properties including:
@@ -28,10 +32,30 @@ This repo now supports live Google APIs (Places + Directions) with mock fallback
     - Georgia Aquarium
     - Mercedes-Benz Stadium
   - Tourist stays with `Tourist Connectivity Score` (0-100).
+  - Route details shown only on selected listing card to reduce clutter.
 - Live API integration in `TransitService`:
   - Google Places Nearby Search for apartments/hotels
   - Google Directions (transit mode) for commute times and route polylines
   - Place Details for provider website links
+
+## Screenshots
+
+Add your captures under `docs/screenshots/` with these filenames:
+
+- `apartments-list.png`
+- `apartment-expanded-journey.png`
+- `travel-list.png`
+- `travel-expanded-journey.png`
+
+### Apartments
+
+![Apartments list](docs/screenshots/apartments-list.png)
+![Apartment journey expanded](docs/screenshots/apartment-expanded-journey.png)
+
+### Travel
+
+![Travel listings](docs/screenshots/travel-list.png)
+![Travel journey expanded](docs/screenshots/travel-expanded-journey.png)
 
 ## File entry points
 
@@ -67,9 +91,8 @@ Recommended setup using xcconfig files:
    - `xcodegen generate`
 4. Run app in Debug
 
-For local Release wiring, copy:
-- `Config/ReleaseSecrets.example.xcconfig` -> `Config/ReleaseSecrets.xcconfig`
-- set `COMMUTEFLOW_BACKEND_BASE_URL` to your Railway domain
+For local Release wiring, create `Config/ReleaseSecrets.xcconfig` with:
+- `COMMUTEFLOW_BACKEND_BASE_URL=https://your-railway-domain.up.railway.app`
 
 `Config/Secrets.xcconfig` is gitignored and will not be committed.
 
@@ -134,3 +157,27 @@ Set iOS build setting / env:
 - Add Redis cache for route/place responses.
 - Add backend integration tests and synthetic uptime checks.
 - Add Sentry/Datadog for backend + iOS runtime monitoring.
+
+## Make it more appealing
+
+If your goal is to impress users/investors/recruiters, focus on these:
+
+- Demo quality first:
+  - Default app launch to a polished city + result set (no empty screen).
+  - Keep card interactions smooth (tap-to-expand journey already helps).
+  - Show realistic route language (line names, stops, direction).
+- Visual polish:
+  - Add branded colors, icon, and typography hierarchy.
+  - Add subtle animations (card expand/collapse, map focus transitions).
+  - Use consistent spacing and larger touch targets for filters.
+- Trust and clarity:
+  - Show "Verified Listing" and "Route confidence" badges.
+  - Add "Updated X min ago" for route freshness.
+  - Explain score logic with an info tooltip ("How is this scored?").
+- Social proof:
+  - Add screenshots/GIFs in this README.
+  - Include a 30-60 second demo video link.
+  - Share simple benchmark claims (e.g., "Finds top transit stays in under 3s").
+- Ship narrative:
+  - In README and pitch: "CommuteFlow helps people optimize where to live/stay based on real transit time, not map distance."
+  - Keep one strong story: "save commute pain + maximize city access."
