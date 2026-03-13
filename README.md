@@ -48,9 +48,7 @@ This repo now supports live Google APIs (Places + Directions) with mock fallback
 
 
 ### Travel
-
 !<img width="200" height="500" alt="Simulator Screenshot - iPhone 16e - 2026-03-13 at 15 17 11" src="https://github.com/user-attachments/assets/c2b07e53-d887-4a7c-a50f-a77212bc8781" />
-
 <img width="200" height="500" alt="Simulator Screenshot - iPhone 16e - 2026-03-13 at 15 17 30" src="https://github.com/user-attachments/assets/1c29affa-2e1d-40e0-ba86-844042a7bdab" />
 
 
