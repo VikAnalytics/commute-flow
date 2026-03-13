@@ -19,4 +19,5 @@ export type BackendProperty = {
   listingSource: "verified" | "generated";
   touristConnectivityScore: number | null;
   polylineCoordinates: LatLng[];
+  journeySegments: string[];
 };

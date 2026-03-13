@@ -15,6 +15,7 @@ type RouteSummary = {
   walkingSeconds: number;
   breakdown: string;
   polylineCoordinates: LatLng[];
+  segments: string[];
 };
 
 export class GoogleMapsClient {
@@ -93,29 +94,40 @@ export class GoogleMapsClient {
       .filter((s: any) => String(s.travel_mode).toUpperCase() === "WALKING")
       .reduce((sum: number, s: any) => sum + (s.duration?.value ?? 0), 0);
 
-    const breakdown = steps
+    const segments = steps
       .map((step: any) => {
         const mode = String(step.travel_mode).toUpperCase();
         if (mode === "WALKING") {
-          return `${Math.max(1, Math.floor((step.duration?.value ?? 60) / 60))} min walk`;
+          return `Walk ${Math.max(1, Math.floor((step.duration?.value ?? 60) / 60))} min`;
         }
         if (mode === "TRANSIT") {
-          return (
+          const minutes = Math.max(1, Math.floor((step.duration?.value ?? 60) / 60));
+          const vehicle = step.transit_details?.line?.vehicle?.name as string | undefined;
+          const label =
             (step.transit_details?.line?.short_name as string | undefined) ??
             (step.transit_details?.line?.name as string | undefined) ??
-            "Transit"
-          );
+            "Transit";
+          const headsign = step.transit_details?.headsign as string | undefined;
+          const departureStop = step.transit_details?.departure_stop?.name as string | undefined;
+          const arrivalStop = step.transit_details?.arrival_stop?.name as string | undefined;
+          const base = vehicle ? `${label} (${vehicle}) ${minutes} min` : `${label} ${minutes} min`;
+          const directionPart = headsign ? ` toward ${headsign}` : "";
+          if (departureStop && arrivalStop) {
+            return `${base}${directionPart} from ${departureStop} to ${arrivalStop}`;
+          }
+          return `${base}${directionPart}`;
         }
-        return mode;
+        return `${mode} ${Math.max(1, Math.floor((step.duration?.value ?? 60) / 60))} min`;
       })
-      .join(" -> ");
+      .filter((s: string) => s.length > 0);
 
     const polyline = decodePolyline((route.overview_polyline?.points as string | undefined) ?? "");
     return {
       durationSeconds: leg.duration.value as number,
       walkingSeconds,
-      breakdown: breakdown || "Transit route available",
-      polylineCoordinates: polyline.length > 0 ? polyline : [origin, destination]
+      breakdown: segments.join(" -> ") || "Transit route available",
+      polylineCoordinates: polyline.length > 0 ? polyline : [origin, destination],
+      segments: segments.length > 0 ? segments : ["Transit route available"]
     };
   }
 }
@@ -128,7 +140,8 @@ export function estimateRoute(origin: LatLng, destination: LatLng): RouteSummary
     durationSeconds: Math.max(300, transitSeconds + walkingSeconds),
     walkingSeconds,
     breakdown: "Transit estimate (backend fallback)",
-    polylineCoordinates: [origin, destination]
+    polylineCoordinates: [origin, destination],
+    segments: ["Walk 4 min", "Transit estimate", "Walk 3 min"]
   };
 }
 

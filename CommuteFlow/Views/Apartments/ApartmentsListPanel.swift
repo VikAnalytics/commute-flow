@@ -5,6 +5,7 @@ import SwiftData
 struct ApartmentsListPanel: View {
     @ObservedObject var viewModel: ApartmentSearchViewModel
     @StateObject private var autocomplete = AddressAutocompleteViewModel()
+    @State private var selectedApartmentID: Property.ID?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \RecentSearch.lastUsedAt, order: .reverse) private var recentSearches: [RecentSearch]
     @Query private var savedProperties: [SavedProperty]
@@ -176,12 +177,22 @@ struct ApartmentsListPanel: View {
                         }
                         .padding(.horizontal)
                     } else {
+                        Text("Tip: Tap a card to view route details.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal)
+
                         ForEach(viewModel.sortedApartments) { apartment in
                             PropertyCardView(
                                 property: apartment,
                                 isSaved: savedKeys.contains(apartment.stableKey),
+                                showJourneyDetails: selectedApartmentID == apartment.id,
+                                showCommuteBreakdownInline: selectedApartmentID == apartment.id,
                                 onToggleSaved: { toggleSaved(for: apartment) }
                             )
+                                .onTapGesture {
+                                    selectedApartmentID = (selectedApartmentID == apartment.id) ? nil : apartment.id
+                                }
                                 .padding(.horizontal)
                         }
                     }

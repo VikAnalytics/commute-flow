@@ -3,6 +3,8 @@ import SwiftUI
 struct PropertyCardView: View {
     let property: Property
     var isSaved: Bool = false
+    var showJourneyDetails: Bool = false
+    var showCommuteBreakdownInline: Bool = true
     var onToggleSaved: (() -> Void)?
     @Environment(\.openURL) private var openURL
 
@@ -40,9 +42,24 @@ struct PropertyCardView: View {
             Label("\(property.commuteTimeMinutes) mins", systemImage: "clock")
                 .font(.subheadline.weight(.medium))
 
-            Label(property.commuteBreakdown, systemImage: "figure.walk.motion")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            if showCommuteBreakdownInline && (!showJourneyDetails || property.journeySegments.isEmpty) {
+                Label(property.commuteBreakdown, systemImage: "figure.walk.motion")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
+            if showJourneyDetails, !property.journeySegments.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Journey")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    ForEach(Array(property.journeySegments.enumerated()), id: \.offset) { index, segment in
+                        Text("\(index + 1). \(segment)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
 
             if let ratingSummary = property.ratingSummary {
                 Label("Rating: \(ratingSummary)", systemImage: "star.fill")

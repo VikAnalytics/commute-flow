@@ -29,6 +29,41 @@ struct Property: Identifiable, Hashable {
     let listingSource: ListingSource
     let touristConnectivityScore: Int?
     let polylineCoordinates: [CLLocationCoordinate2D]
+    let journeySegments: [String]
+
+    init(
+        kind: Kind,
+        name: String,
+        coordinate: CLLocationCoordinate2D,
+        monthlyRentRange: String?,
+        nightlyRateRange: String?,
+        commuteTimeMinutes: Int,
+        walkingMinutes: Int,
+        commuteBreakdown: String,
+        websiteURL: URL,
+        rating: Double?,
+        ratingReviewCount: Int?,
+        listingSource: ListingSource,
+        touristConnectivityScore: Int?,
+        polylineCoordinates: [CLLocationCoordinate2D],
+        journeySegments: [String] = []
+    ) {
+        self.kind = kind
+        self.name = name
+        self.coordinate = coordinate
+        self.monthlyRentRange = monthlyRentRange
+        self.nightlyRateRange = nightlyRateRange
+        self.commuteTimeMinutes = commuteTimeMinutes
+        self.walkingMinutes = walkingMinutes
+        self.commuteBreakdown = commuteBreakdown
+        self.websiteURL = websiteURL
+        self.rating = rating
+        self.ratingReviewCount = ratingReviewCount
+        self.listingSource = listingSource
+        self.touristConnectivityScore = touristConnectivityScore
+        self.polylineCoordinates = polylineCoordinates
+        self.journeySegments = journeySegments
+    }
 
     var routePolyline: MKPolyline {
         MKPolyline(coordinates: polylineCoordinates, count: polylineCoordinates.count)

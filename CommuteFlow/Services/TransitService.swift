@@ -8,6 +8,13 @@ struct ApartmentSearchResult {
     let properties: [Property]
 }
 
+struct TravelSearchResult {
+    let cityName: String
+    let cityCoordinate: CLLocationCoordinate2D
+    let touristHubs: [TouristHub]
+    let properties: [Property]
+}
+
 protocol LocationResolving {
     func resolveAddress(_ address: String) async throws -> CLLocationCoordinate2D
 }
@@ -65,7 +72,7 @@ enum TransitServiceError: LocalizedError {
         case .providerUnavailable:
             return "Transit provider is currently unavailable."
         case let .unsupportedCity(city):
-            return "Only Atlanta is supported right now. Received: \(city)."
+            return city
         case let .upstreamError(message):
             return message
         }
@@ -74,7 +81,7 @@ enum TransitServiceError: LocalizedError {
 
 protocol TransitProviding {
     func fetchApartments(near workplace: String, withinMiles: Double) async throws -> ApartmentSearchResult
-    func fetchTouristStays(for cityName: String, hubs: [TouristHub]) async throws -> [Property]
+    func fetchTouristStays(for cityName: String, hubs: [TouristHub]) async throws -> TravelSearchResult
 }
 
 protocol AnalyticsTracking {
@@ -136,6 +143,9 @@ final class TransitService: TransitProviding {
         }
 
         let workplaceCoordinate = try await locationResolver.resolveAddress(trimmed)
+        guard isInAtlantaMarket(workplaceCoordinate) else {
+            throw TransitServiceError.unsupportedCity("Apartments are currently available only in Atlanta metro.")
+        }
         let attemptedBackend = backendBaseURL != nil
         if let backendBaseURL {
             do {
@@ -211,24 +221,33 @@ final class TransitService: TransitProviding {
         return result
     }
 
-    func fetchTouristStays(for cityName: String, hubs: [TouristHub]) async throws -> [Property] {
+    func fetchTouristStays(for cityName: String, hubs: [TouristHub]) async throws -> TravelSearchResult {
         let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             throw TransitServiceError.invalidInput("Please enter a city.")
         }
-        guard !hubs.isEmpty else {
-            throw TransitServiceError.invalidInput("No tourist hubs configured.")
+        let cityContext = try await resolveCityContext(trimmed)
+        guard cityContext.isAtlanta || cityContext.isInEurope else {
+            throw TransitServiceError.unsupportedCity("Travel supports Atlanta and cities in Europe. Received: \(trimmed).")
         }
-        guard trimmed.caseInsensitiveCompare("Atlanta") == .orderedSame else {
-            throw TransitServiceError.unsupportedCity(trimmed)
+        let effectiveHubs = if !hubs.isEmpty {
+            hubs
+        } else {
+            generateFallbackHubs(near: cityContext.coordinate)
         }
+        let orderedEffectiveHubs = orderHubsSequentially(around: cityContext.coordinate, hubs: effectiveHubs)
 
         let attemptedBackend = backendBaseURL != nil
-        if let backendBaseURL {
+        if let backendBaseURL, !orderedEffectiveHubs.isEmpty {
             do {
-                if let backendStays = try await fetchBackendTravelStays(baseURL: backendBaseURL, cityName: trimmed, hubs: hubs) {
+                if let backendStays = try await fetchBackendTravelStays(baseURL: backendBaseURL, cityName: trimmed, hubs: orderedEffectiveHubs) {
                     analytics.track(name: "travel_backend_success", metadata: ["count": "\(backendStays.count)"])
-                    return backendStays
+                    return TravelSearchResult(
+                        cityName: trimmed,
+                        cityCoordinate: cityContext.coordinate,
+                        touristHubs: orderedEffectiveHubs,
+                        properties: backendStays
+                    )
                 }
             } catch {
                 analytics.track(name: "travel_backend_failed", metadata: ["error": error.localizedDescription])
@@ -238,14 +257,21 @@ final class TransitService: TransitProviding {
         let apiKey = googleAPIKey?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if shouldUseDirectGoogle && !apiKey.isEmpty {
             do {
+                let hubsForLiveScoring = try await discoverTouristHubs(near: cityContext.coordinate, apiKey: apiKey)
+                let liveHubs = hubsForLiveScoring.isEmpty ? orderedEffectiveHubs : orderHubsSequentially(around: cityContext.coordinate, hubs: hubsForLiveScoring)
                 let liveStays = if let liveTravelFetcher {
-                    try await liveTravelFetcher(trimmed, hubs, apiKey)
+                    try await liveTravelFetcher(trimmed, liveHubs, apiKey)
                 } else {
-                    try await fetchLiveTouristStays(cityName: trimmed, hubs: hubs, apiKey: apiKey)
+                    try await fetchLiveTouristStays(cityName: trimmed, hubs: liveHubs, apiKey: apiKey)
                 }
                 if !liveStays.isEmpty {
                     analytics.track(name: "travel_google_success", metadata: ["count": "\(liveStays.count)"])
-                    return liveStays
+                    return TravelSearchResult(
+                        cityName: trimmed,
+                        cityCoordinate: cityContext.coordinate,
+                        touristHubs: liveHubs,
+                        properties: liveStays
+                    )
                 }
                 analytics.track(name: "travel_google_empty", metadata: [:])
             } catch {
@@ -263,7 +289,12 @@ final class TransitService: TransitProviding {
 
         // Fallback for local development without API key.
         analytics.track(name: "travel_mock_fallback", metadata: ["count": "\(MockData.atlantaTouristStays.count)"])
-        return MockData.atlantaTouristStays
+        return TravelSearchResult(
+            cityName: trimmed,
+            cityCoordinate: cityContext.coordinate,
+            touristHubs: cityContext.isAtlanta ? MockData.touristHubs : orderedEffectiveHubs,
+            properties: cityContext.isAtlanta ? MockData.atlantaTouristStays : MockData.atlantaTouristStays
+        )
     }
 
     private func fetchLiveApartments(
@@ -311,7 +342,8 @@ final class TransitService: TransitProviding {
                     ratingReviewCount: place.userRatingsTotal,
                     listingSource: .verified,
                     touristConnectivityScore: nil,
-                    polylineCoordinates: route.polylineCoordinates
+                    polylineCoordinates: route.polylineCoordinates,
+                    journeySegments: route.segments
                 )
             )
         }
@@ -323,6 +355,7 @@ final class TransitService: TransitProviding {
         hubs: [TouristHub],
         apiKey: String
     ) async throws -> [Property] {
+        guard !hubs.isEmpty else { return [] }
         let center = centroid(of: hubs.map(\.coordinate))
         let places = try await nearbyPlaces(
             location: center,
@@ -346,6 +379,10 @@ final class TransitService: TransitProviding {
             let score = touristConnectivityScore(avgDurationSeconds: averageDuration, avgWalkingSeconds: averageWalking)
             let website = try await placeWebsiteURL(for: place.placeID, fallback: place.googleURL, apiKey: apiKey)
             let headlineRoute = routesByHub.min(by: { $0.durationSeconds < $1.durationSeconds })!
+            let journeySegments = zip(hubs, routesByHub).map { hub, route in
+                let path = route.segments.joined(separator: " -> ")
+                return "To \(hub.name): \(path)"
+            }
 
             properties.append(
                 Property(
@@ -362,7 +399,8 @@ final class TransitService: TransitProviding {
                     ratingReviewCount: place.userRatingsTotal,
                     listingSource: .verified,
                     touristConnectivityScore: score,
-                    polylineCoordinates: headlineRoute.polylineCoordinates
+                    polylineCoordinates: headlineRoute.polylineCoordinates,
+                    journeySegments: journeySegments
                 )
             )
         }
@@ -449,29 +487,57 @@ final class TransitService: TransitProviding {
             .filter { $0.travelMode.uppercased() == "WALKING" }
             .reduce(0) { $0 + ($1.duration?.value ?? 0) }
 
-        let breakdown = steps.map { step in
+        let segments = steps.map { step in
             let mode = step.travelMode.uppercased()
             if mode == "WALKING" {
                 let minutes = max(1, (step.duration?.value ?? 60) / 60)
-                return "\(minutes) min walk"
+                return "Walk \(minutes) min"
             }
             if mode == "TRANSIT" {
+                let minutes = max(1, (step.duration?.value ?? 60) / 60)
+                let vehicleName = step.transitDetails?.line?.vehicle?.name
+                let headsign = step.transitDetails?.headsign?.trimmingCharacters(in: .whitespacesAndNewlines)
+                let departureStop = step.transitDetails?.departureStop?.name?.trimmingCharacters(in: .whitespacesAndNewlines)
+                let arrivalStop = step.transitDetails?.arrivalStop?.name?.trimmingCharacters(in: .whitespacesAndNewlines)
+                let directionPart = (headsign?.isEmpty == false) ? " toward \(headsign!)" : ""
                 if let shortName = step.transitDetails?.line?.shortName, !shortName.isEmpty {
-                    return shortName
+                    let base = if let vehicleName, !vehicleName.isEmpty {
+                        "\(shortName) (\(vehicleName)) \(minutes) min"
+                    } else {
+                        "\(shortName) \(minutes) min"
+                    }
+                    if let departureStop, let arrivalStop, !departureStop.isEmpty, !arrivalStop.isEmpty {
+                        return "\(base)\(directionPart) from \(departureStop) to \(arrivalStop)"
+                    }
+                    return "\(base)\(directionPart)"
                 }
                 if let lineName = step.transitDetails?.line?.name, !lineName.isEmpty {
-                    return lineName
+                    let base = if let vehicleName, !vehicleName.isEmpty {
+                        "\(lineName) (\(vehicleName)) \(minutes) min"
+                    } else {
+                        "\(lineName) \(minutes) min"
+                    }
+                    if let departureStop, let arrivalStop, !departureStop.isEmpty, !arrivalStop.isEmpty {
+                        return "\(base)\(directionPart) from \(departureStop) to \(arrivalStop)"
+                    }
+                    return "\(base)\(directionPart)"
                 }
-                return "Transit"
+                let base = "Transit \(minutes) min"
+                if let departureStop, let arrivalStop, !departureStop.isEmpty, !arrivalStop.isEmpty {
+                    return "\(base)\(directionPart) from \(departureStop) to \(arrivalStop)"
+                }
+                return "\(base)\(directionPart)"
             }
-            return mode.capitalized
-        }.joined(separator: " -> ")
+            let minutes = max(1, (step.duration?.value ?? 60) / 60)
+            return "\(mode.capitalized) \(minutes) min"
+        }.filter { !$0.isEmpty }
 
         return LiveTransitRoute(
             durationSeconds: leg.duration.value,
             walkingDurationSeconds: walkingSeconds,
-            breakdown: breakdown.isEmpty ? "Transit route available" : breakdown,
-            polylineCoordinates: polyline.isEmpty ? [origin, destination] : polyline
+            breakdown: segments.isEmpty ? "Transit route available" : segments.joined(separator: " -> "),
+            polylineCoordinates: polyline.isEmpty ? [origin, destination] : polyline,
+            segments: segments.isEmpty ? ["Transit route available"] : segments
         )
     }
 
@@ -546,7 +612,8 @@ final class TransitService: TransitProviding {
             polylineCoordinates: value.polylineCoordinates.map {
                 CLLocationCoordinate2D(latitude: $0.lat, longitude: $0.lng)
             }.isEmpty ? [CLLocationCoordinate2D(latitude: value.latitude, longitude: value.longitude)] :
-                value.polylineCoordinates.map { CLLocationCoordinate2D(latitude: $0.lat, longitude: $0.lng) }
+                value.polylineCoordinates.map { CLLocationCoordinate2D(latitude: $0.lat, longitude: $0.lng) },
+            journeySegments: value.journeySegments ?? []
         )
     }
 
@@ -657,6 +724,79 @@ final class TransitService: TransitProviding {
         return CLLocationCoordinate2D(latitude: sumLat / Double(coordinates.count), longitude: sumLon / Double(coordinates.count))
     }
 
+    private func isInAtlantaMarket(_ coordinate: CLLocationCoordinate2D) -> Bool {
+        let atlantaCenter = CLLocation(latitude: 33.7490, longitude: -84.3880)
+        let point = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        return point.distance(from: atlantaCenter) <= 56_000 // ~35 miles
+    }
+
+    private func resolveCityContext(_ cityName: String) async throws -> CityContext {
+        let placemarks = try await CLGeocoder().geocodeAddressStringAsync(cityName)
+        guard let first = placemarks.first, let coordinate = first.location?.coordinate else {
+            throw TransitServiceError.invalidInput("Could not resolve city: \(cityName).")
+        }
+        let isAtlanta = cityName.caseInsensitiveCompare("Atlanta") == .orderedSame ||
+            (first.locality?.caseInsensitiveCompare("Atlanta") == .orderedSame)
+        let europeCountryCodes: Set<String> = [
+            "AL", "AD", "AT", "BY", "BE", "BA", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE",
+            "GR", "HU", "IS", "IE", "IT", "XK", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME", "NL",
+            "MK", "NO", "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI", "ES", "SE", "CH", "UA", "GB",
+            "VA"
+        ]
+        let isInEurope = europeCountryCodes.contains(first.isoCountryCode ?? "")
+        return CityContext(coordinate: coordinate, isAtlanta: isAtlanta, isInEurope: isInEurope)
+    }
+
+    private func discoverTouristHubs(near center: CLLocationCoordinate2D, apiKey: String) async throws -> [TouristHub] {
+        let attractions = try await nearbyPlaces(
+            location: center,
+            radiusMeters: 10_000,
+            keyword: "tourist attraction",
+            type: "tourist_attraction",
+            apiKey: apiKey
+        )
+        return attractions.prefix(3).map {
+            TouristHub(name: $0.name, coordinate: $0.coordinate)
+        }
+    }
+
+    private func orderHubsSequentially(around center: CLLocationCoordinate2D, hubs: [TouristHub]) -> [TouristHub] {
+        guard !hubs.isEmpty else { return [] }
+        var unvisited = hubs
+        let startIndex = unvisited.enumerated().min(by: { distanceMeters(from: center, to: $0.element.coordinate) < distanceMeters(from: center, to: $1.element.coordinate) })?.offset ?? 0
+        var ordered: [TouristHub] = [unvisited.remove(at: startIndex)]
+
+        while !unvisited.isEmpty {
+            guard let last = ordered.last else { break }
+            let nextIndex = unvisited.enumerated().min(by: {
+                distanceMeters(from: last.coordinate, to: $0.element.coordinate) < distanceMeters(from: last.coordinate, to: $1.element.coordinate)
+            })?.offset ?? 0
+            ordered.append(unvisited.remove(at: nextIndex))
+        }
+        return ordered
+    }
+
+    private func distanceMeters(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> CLLocationDistance {
+        CLLocation(latitude: from.latitude, longitude: from.longitude)
+            .distance(from: CLLocation(latitude: to.latitude, longitude: to.longitude))
+    }
+
+    private func generateFallbackHubs(near center: CLLocationCoordinate2D) -> [TouristHub] {
+        let hub1 = TouristHub(
+            name: "City Center Landmark",
+            coordinate: center
+        )
+        let hub2 = TouristHub(
+            name: "Historic District",
+            coordinate: CLLocationCoordinate2D(latitude: center.latitude + 0.015, longitude: center.longitude - 0.01)
+        )
+        let hub3 = TouristHub(
+            name: "Main Museum Quarter",
+            coordinate: CLLocationCoordinate2D(latitude: center.latitude - 0.012, longitude: center.longitude + 0.014)
+        )
+        return [hub1, hub2, hub3]
+    }
+
     private func estimatedRoute(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> LiveTransitRoute {
         let fromLocation = CLLocation(latitude: from.latitude, longitude: from.longitude)
         let toLocation = CLLocation(latitude: to.latitude, longitude: to.longitude)
@@ -671,7 +811,8 @@ final class TransitService: TransitProviding {
             durationSeconds: total,
             walkingDurationSeconds: walkingSeconds,
             breakdown: "Transit estimate (live route unavailable)",
-            polylineCoordinates: [from, to]
+            polylineCoordinates: [from, to],
+            segments: ["Walk 4 min", "Transit estimate", "Walk 3 min"]
         )
     }
 
@@ -713,6 +854,12 @@ final class TransitService: TransitProviding {
 
         return coordinates
     }
+}
+
+private struct CityContext {
+    let coordinate: CLLocationCoordinate2D
+    let isAtlanta: Bool
+    let isInEurope: Bool
 }
 
 private enum RuntimeConfig {
@@ -821,6 +968,7 @@ private struct BackendProperty: Decodable {
     let listingSource: String
     let touristConnectivityScore: Int?
     let polylineCoordinates: [BackendCoordinate]
+    let journeySegments: [String]?
 }
 
 private struct BackendCoordinate: Decodable {
@@ -842,6 +990,7 @@ private struct LiveTransitRoute {
     let walkingDurationSeconds: Int
     let breakdown: String
     let polylineCoordinates: [CLLocationCoordinate2D]
+    let segments: [String]
 }
 
 private struct GooglePlacesNearbyResponse: Decodable {
@@ -926,16 +1075,36 @@ private struct GoogleDirectionStep: Decodable {
 
 private struct GoogleTransitDetails: Decodable {
     let line: GoogleTransitLine?
+    let headsign: String?
+    let departureStop: GoogleTransitStop?
+    let arrivalStop: GoogleTransitStop?
+
+    enum CodingKeys: String, CodingKey {
+        case line
+        case headsign
+        case departureStop = "departure_stop"
+        case arrivalStop = "arrival_stop"
+    }
 }
 
 private struct GoogleTransitLine: Decodable {
     let shortName: String?
     let name: String?
+    let vehicle: GoogleTransitVehicle?
 
     enum CodingKeys: String, CodingKey {
         case shortName = "short_name"
         case name
+        case vehicle
     }
+}
+
+private struct GoogleTransitVehicle: Decodable {
+    let name: String?
+}
+
+private struct GoogleTransitStop: Decodable {
+    let name: String?
 }
 
 private extension CLGeocoder {
@@ -1007,7 +1176,8 @@ enum MockData {
                 CLLocationCoordinate2D(latitude: 33.7802, longitude: -84.3873),
                 CLLocationCoordinate2D(latitude: 33.7814, longitude: -84.3880),
                 workplaceCoordinate
-            ]
+            ],
+            journeySegments: ["Walk 8 min"]
         ),
         Property(
             kind: .apartment,
@@ -1028,7 +1198,8 @@ enum MockData {
                 CLLocationCoordinate2D(latitude: 33.8487, longitude: -84.3670),
                 CLLocationCoordinate2D(latitude: 33.7815, longitude: -84.3860),
                 workplaceCoordinate
-            ]
+            ],
+            journeySegments: ["Walk 6 min", "MARTA Red Line (Subway) 14 min", "Walk 2 min"]
         )
     ]
 
@@ -1051,7 +1222,8 @@ enum MockData {
                 CLLocationCoordinate2D(latitude: 33.7820, longitude: -84.3842),
                 CLLocationCoordinate2D(latitude: 33.7818, longitude: -84.3860),
                 CLLocationCoordinate2D(latitude: 33.7634, longitude: -84.3951)
-            ]
+            ],
+            journeySegments: ["Walk 4 min", "MARTA Red Line (Subway) 9 min", "Walk 2 min"]
         ),
         Property(
             kind: .airbnb,
@@ -1071,7 +1243,8 @@ enum MockData {
                 CLLocationCoordinate2D(latitude: 33.7667, longitude: -84.3665),
                 CLLocationCoordinate2D(latitude: 33.7678, longitude: -84.3735),
                 CLLocationCoordinate2D(latitude: 33.7634, longitude: -84.3951)
-            ]
+            ],
+            journeySegments: ["Walk 7 min", "Atlanta Streetcar 8 min", "Walk 3 min"]
         ),
         Property(
             kind: .hotel,
@@ -1091,7 +1264,8 @@ enum MockData {
                 CLLocationCoordinate2D(latitude: 33.7575, longitude: -84.3963),
                 CLLocationCoordinate2D(latitude: 33.7600, longitude: -84.3969),
                 CLLocationCoordinate2D(latitude: 33.7634, longitude: -84.3951)
-            ]
+            ],
+            journeySegments: ["Walk 3 min", "MARTA Blue/Green Line (Subway) 6 min", "Walk 2 min"]
         )
     ]
 
@@ -1134,7 +1308,10 @@ enum MockData {
                     propertyCoordinate,
                     offsetCoordinate(from: propertyCoordinate, latMeters: offset.latMeters * -0.25, lonMeters: offset.lonMeters * -0.25),
                     workplace
-                ]
+                ],
+                journeySegments: template.breakdown
+                    .components(separatedBy: "->")
+                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             )
         }
     }

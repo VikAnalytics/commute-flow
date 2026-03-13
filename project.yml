@@ -8,7 +8,6 @@ configs:
   Release: release
 settings:
   base:
-    PRODUCT_BUNDLE_IDENTIFIER: com.commuteflow.app
     SWIFT_VERSION: 5.10
 targets:
   CommuteFlow:
@@ -21,6 +20,7 @@ targets:
       Release: Config/Release.xcconfig
     settings:
       base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vikanalytics.commuteflow.vikrant.app
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_COMMUTEFLOW_GOOGLE_API_KEY: $(COMMUTEFLOW_GOOGLE_API_KEY)
         INFOPLIST_KEY_COMMUTEFLOW_ALLOW_DIRECT_GOOGLE: $(COMMUTEFLOW_ALLOW_DIRECT_GOOGLE)
@@ -42,6 +42,6 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: com.commuteflow.app.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.vikanalytics.commuteflow.vikrant.tests
     dependencies:
       - target: CommuteFlow

@@ -70,7 +70,8 @@ app.post("/api/v1/apartments/search", async (req, res, next) => {
         ratingReviewCount: place.ratingCount,
         listingSource: "verified",
         touristConnectivityScore: null,
-        polylineCoordinates: route.polylineCoordinates
+        polylineCoordinates: route.polylineCoordinates,
+        journeySegments: route.segments
       });
     }
 
@@ -99,6 +100,10 @@ app.post("/api/v1/travel/stays", async (req, res, next) => {
       const avgDuration = Math.floor(routes.reduce((sum, r) => sum + r.durationSeconds, 0) / routes.length);
       const avgWalking = Math.floor(routes.reduce((sum, r) => sum + r.walkingSeconds, 0) / routes.length);
       const bestRoute = routes.reduce((best, current) => (current.durationSeconds < best.durationSeconds ? current : best), routes[0]);
+      const journeySegments = payload.hubs.map((hub, index) => {
+        const route = routes[index];
+        return `To ${hub.name}: ${route.segments.join(" -> ")}`;
+      });
 
       properties.push({
         kind: "hotel",
@@ -115,7 +120,8 @@ app.post("/api/v1/travel/stays", async (req, res, next) => {
         ratingReviewCount: place.ratingCount,
         listingSource: "verified",
         touristConnectivityScore: touristConnectivityScore(avgDuration, avgWalking),
-        polylineCoordinates: bestRoute.polylineCoordinates
+        polylineCoordinates: bestRoute.polylineCoordinates,
+        journeySegments
       });
     }
 

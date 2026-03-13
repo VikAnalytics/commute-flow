@@ -44,6 +44,7 @@ final class SavedProperty {
     var ratingReviewCount: Int?
     var listingSourceRawValue: String
     var touristConnectivityScore: Int?
+    var journeySegmentsBlob: String = ""
 
     init(from property: Property, savedAt: Date = .now) {
         propertyKey = property.stableKey
@@ -62,6 +63,7 @@ final class SavedProperty {
         ratingReviewCount = property.ratingReviewCount
         listingSourceRawValue = property.listingSource.rawValue
         touristConnectivityScore = property.touristConnectivityScore
+        journeySegmentsBlob = property.journeySegments.joined(separator: "\n")
     }
 
     var property: Property {
@@ -79,7 +81,8 @@ final class SavedProperty {
             ratingReviewCount: ratingReviewCount,
             listingSource: Property.ListingSource(rawValue: listingSourceRawValue) ?? .verified,
             touristConnectivityScore: touristConnectivityScore,
-            polylineCoordinates: [CLLocationCoordinate2D(latitude: latitude, longitude: longitude)]
+            polylineCoordinates: [CLLocationCoordinate2D(latitude: latitude, longitude: longitude)],
+            journeySegments: journeySegmentsBlob.isEmpty ? [] : journeySegmentsBlob.components(separatedBy: "\n")
         )
     }
 }
