@@ -1,0 +1,8 @@
+Config/Secrets.xcconfig
+Config/ReleaseSecrets.xcconfig
+backend/.env
+backend/node_modules
+backend/dist
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/

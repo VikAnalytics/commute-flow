@@ -1,0 +1,5 @@
+#include "Base.xcconfig"
+#include? "Secrets.xcconfig"
+#include? "ReleaseSecrets.xcconfig"
+
+COMMUTEFLOW_ALLOW_DIRECT_GOOGLE = NO

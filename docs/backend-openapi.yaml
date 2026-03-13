@@ -1,0 +1,122 @@
+openapi: 3.0.3
+info:
+  title: CommuteFlow Backend API
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+  /api/v1/apartments/search:
+    post:
+      summary: Search apartment candidates near workplace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [workplaceName, workplaceLat, workplaceLng, withinMiles]
+              properties:
+                workplaceName: { type: string }
+                workplaceLat: { type: number }
+                workplaceLng: { type: number }
+                withinMiles: { type: number }
+      responses:
+        "200":
+          description: Apartment results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApartmentsResponse"
+  /api/v1/travel/stays:
+    post:
+      summary: Search tourist stay candidates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [cityName, hubs]
+              properties:
+                cityName: { type: string }
+                hubs:
+                  type: array
+                  items:
+                    type: object
+                    required: [name, lat, lng]
+                    properties:
+                      name: { type: string }
+                      lat: { type: number }
+                      lng: { type: number }
+      responses:
+        "200":
+          description: Stay results
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [properties]
+                properties:
+                  properties:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/BackendProperty"
+components:
+  schemas:
+    LatLng:
+      type: object
+      required: [lat, lng]
+      properties:
+        lat: { type: number }
+        lng: { type: number }
+    BackendProperty:
+      type: object
+      required:
+        [
+          kind,
+          name,
+          latitude,
+          longitude,
+          commuteTimeMinutes,
+          walkingMinutes,
+          commuteBreakdown,
+          websiteURL,
+          listingSource,
+          polylineCoordinates
+        ]
+      properties:
+        kind: { type: string, enum: [apartment, hotel, airbnb] }
+        name: { type: string }
+        latitude: { type: number }
+        longitude: { type: number }
+        monthlyRentRange: { type: string, nullable: true }
+        nightlyRateRange: { type: string, nullable: true }
+        commuteTimeMinutes: { type: integer }
+        walkingMinutes: { type: integer }
+        commuteBreakdown: { type: string }
+        websiteURL: { type: string }
+        rating: { type: number, nullable: true }
+        ratingReviewCount: { type: integer, nullable: true }
+        listingSource: { type: string, enum: [verified, generated] }
+        touristConnectivityScore: { type: integer, nullable: true }
+        polylineCoordinates:
+          type: array
+          items:
+            $ref: "#/components/schemas/LatLng"
+    ApartmentsResponse:
+      type: object
+      required: [properties]
+      properties:
+        workplaceName: { type: string, nullable: true }
+        workplaceLat: { type: number, nullable: true }
+        workplaceLng: { type: number, nullable: true }
+        properties:
+          type: array
+          items:
+            $ref: "#/components/schemas/BackendProperty"

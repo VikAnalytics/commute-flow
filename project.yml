@@ -1,0 +1,47 @@
+name: CommuteFlow
+options:
+  minimumXcodeGenVersion: 2.38.0
+  deploymentTarget:
+    iOS: "17.0"
+configs:
+  Debug: debug
+  Release: release
+settings:
+  base:
+    PRODUCT_BUNDLE_IDENTIFIER: com.commuteflow.app
+    SWIFT_VERSION: 5.10
+targets:
+  CommuteFlow:
+    type: application
+    platform: iOS
+    sources:
+      - CommuteFlow
+    configFiles:
+      Debug: Config/Debug.xcconfig
+      Release: Config/Release.xcconfig
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_COMMUTEFLOW_GOOGLE_API_KEY: $(COMMUTEFLOW_GOOGLE_API_KEY)
+        INFOPLIST_KEY_COMMUTEFLOW_ALLOW_DIRECT_GOOGLE: $(COMMUTEFLOW_ALLOW_DIRECT_GOOGLE)
+        INFOPLIST_KEY_COMMUTEFLOW_BACKEND_BASE_URL: $(COMMUTEFLOW_BACKEND_BASE_URL)
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: true
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+    scheme:
+      testTargets:
+        - CommuteFlowTests
+
+  CommuteFlowTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - CommuteFlowTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.commuteflow.app.tests
+    dependencies:
+      - target: CommuteFlow

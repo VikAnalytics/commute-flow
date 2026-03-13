@@ -1,0 +1,527 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		086299F69F3067C5A31030CF /* ApartmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCD2B81A2D31D955B96D739 /* ApartmentsView.swift */; };
+		2378C1CA1277B6BEA6582E51 /* TravelMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F152741DF96F687859D0A4E /* TravelMapView.swift */; };
+		51B45D11E0307670669378D4 /* CommuteFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A44AF4D94B75E70829BADD /* CommuteFlowApp.swift */; };
+		667410239970E4938455E02E /* PropertySortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E6AFFD27FB46AC69C898D /* PropertySortOption.swift */; };
+		7C93743036A26B82FEDAA269 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAFF61D195DD4A90D9BD6FD /* Property.swift */; };
+		91093ED39EAE407197FE6C44 /* ApartmentsMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BFCAA16CBCC44D3D07C29C1 /* ApartmentsMapView.swift */; };
+		99D3922F491F1A37340189BE /* TravelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFF548759F339E62989A8C2 /* TravelView.swift */; };
+		A1FE6DBEE891AE6AD0081056 /* LoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE222E834F4C92AEA0406A4 /* LoadState.swift */; };
+		A27D597A5641E930FAF4834E /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EDC6EBE8BAE10F7AAF1752 /* RootTabView.swift */; };
+		A7220A46040D777D3F156DD2 /* TransitServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353A52EC8EADC0C3A0E2CD7B /* TransitServiceTests.swift */; };
+		B12B1749C01E7F5296DDEF33 /* TransitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8CA8FE6A49A815497F9231 /* TransitService.swift */; };
+		BB75C52BFBE11871E0B1A49F /* PropertyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4852DAABF94629ABE81188A /* PropertyCardView.swift */; };
+		C38C4220968919B4BF32FF74 /* ApartmentsListPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F8BB3F6D7A5EA143AA0BC5 /* ApartmentsListPanel.swift */; };
+		C4C15064BCE8CBC6FE2120AE /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEBA74C201D2F5F48B41B1B /* AppDependencies.swift */; };
+		D302AB8CE7DF7A59763226C7 /* TouristHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418DFDA81EACC2865ACA425 /* TouristHub.swift */; };
+		D75D2BB67B95759A9CA6BCDC /* ApartmentSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153369E2BFF958735559C556 /* ApartmentSearchViewModel.swift */; };
+		EAF481D9A2BA4143099D26A2 /* TravelConnectivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DAB24C9B8CBE71F2E199224 /* TravelConnectivityViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2852F93CFDCC08A28728903F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 577F9644127591D1999876DD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 863E96AA45287F8C11DC7896;
+			remoteInfo = CommuteFlow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0BFCAA16CBCC44D3D07C29C1 /* ApartmentsMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartmentsMapView.swift; sourceTree = "<group>"; };
+		0E8CA8FE6A49A815497F9231 /* TransitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitService.swift; sourceTree = "<group>"; };
+		153369E2BFF958735559C556 /* ApartmentSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartmentSearchViewModel.swift; sourceTree = "<group>"; };
+		1F152741DF96F687859D0A4E /* TravelMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMapView.swift; sourceTree = "<group>"; };
+		1FAFF61D195DD4A90D9BD6FD /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
+		239E6AFFD27FB46AC69C898D /* PropertySortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertySortOption.swift; sourceTree = "<group>"; };
+		353A52EC8EADC0C3A0E2CD7B /* TransitServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitServiceTests.swift; sourceTree = "<group>"; };
+		35EDC6EBE8BAE10F7AAF1752 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		361274EAD3EFB8B9D7516681 /* CommuteFlow.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CommuteFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FE222E834F4C92AEA0406A4 /* LoadState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadState.swift; sourceTree = "<group>"; };
+		4EEBA74C201D2F5F48B41B1B /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
+		5B5BF37BA376D78C6DAC4D45 /* CommuteFlowTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CommuteFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FCD2B81A2D31D955B96D739 /* ApartmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartmentsView.swift; sourceTree = "<group>"; };
+		99A44AF4D94B75E70829BADD /* CommuteFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommuteFlowApp.swift; sourceTree = "<group>"; };
+		9DAB24C9B8CBE71F2E199224 /* TravelConnectivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelConnectivityViewModel.swift; sourceTree = "<group>"; };
+		A31E5B32432E42796F17FEE7 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		ACFF548759F339E62989A8C2 /* TravelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelView.swift; sourceTree = "<group>"; };
+		B4852DAABF94629ABE81188A /* PropertyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyCardView.swift; sourceTree = "<group>"; };
+		B7761185EA1CC45D68B54758 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		C418DFDA81EACC2865ACA425 /* TouristHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouristHub.swift; sourceTree = "<group>"; };
+		E9F8BB3F6D7A5EA143AA0BC5 /* ApartmentsListPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartmentsListPanel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		044998047D63A0CE28EFCBEE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				361274EAD3EFB8B9D7516681 /* CommuteFlow.app */,
+				5B5BF37BA376D78C6DAC4D45 /* CommuteFlowTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0C5D6644B6C5E8E1C4230B1E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B4852DAABF94629ABE81188A /* PropertyCardView.swift */,
+				35EDC6EBE8BAE10F7AAF1752 /* RootTabView.swift */,
+				74BA584819183827C244C6C7 /* Apartments */,
+				B04DF22F777E6CA906094E78 /* Travel */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5FC119BABBA3971301F43AC1 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B7761185EA1CC45D68B54758 /* Debug.xcconfig */,
+				A31E5B32432E42796F17FEE7 /* Release.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		60B2DC85ECDDD8EC3B751C11 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				153369E2BFF958735559C556 /* ApartmentSearchViewModel.swift */,
+				9DAB24C9B8CBE71F2E199224 /* TravelConnectivityViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		60E03DC6529995A5DE07A1A5 /* CommuteFlowTests */ = {
+			isa = PBXGroup;
+			children = (
+				353A52EC8EADC0C3A0E2CD7B /* TransitServiceTests.swift */,
+			);
+			path = CommuteFlowTests;
+			sourceTree = "<group>";
+		};
+		67C24A9DA1D63B59604A9EEC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0E8CA8FE6A49A815497F9231 /* TransitService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		74BA584819183827C244C6C7 /* Apartments */ = {
+			isa = PBXGroup;
+			children = (
+				E9F8BB3F6D7A5EA143AA0BC5 /* ApartmentsListPanel.swift */,
+				0BFCAA16CBCC44D3D07C29C1 /* ApartmentsMapView.swift */,
+				7FCD2B81A2D31D955B96D739 /* ApartmentsView.swift */,
+			);
+			path = Apartments;
+			sourceTree = "<group>";
+		};
+		82D22180121691F41FF728ED /* CommuteFlow */ = {
+			isa = PBXGroup;
+			children = (
+				99A44AF4D94B75E70829BADD /* CommuteFlowApp.swift */,
+				E2DC348A1F5623F7072DE954 /* Core */,
+				DB73B20EB9A9BC844413BE9E /* Models */,
+				67C24A9DA1D63B59604A9EEC /* Services */,
+				60B2DC85ECDDD8EC3B751C11 /* ViewModels */,
+				0C5D6644B6C5E8E1C4230B1E /* Views */,
+			);
+			path = CommuteFlow;
+			sourceTree = "<group>";
+		};
+		B04DF22F777E6CA906094E78 /* Travel */ = {
+			isa = PBXGroup;
+			children = (
+				1F152741DF96F687859D0A4E /* TravelMapView.swift */,
+				ACFF548759F339E62989A8C2 /* TravelView.swift */,
+			);
+			path = Travel;
+			sourceTree = "<group>";
+		};
+		D39FD3F5D5DDDC608B4EB5E9 = {
+			isa = PBXGroup;
+			children = (
+				82D22180121691F41FF728ED /* CommuteFlow */,
+				60E03DC6529995A5DE07A1A5 /* CommuteFlowTests */,
+				5FC119BABBA3971301F43AC1 /* Config */,
+				044998047D63A0CE28EFCBEE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DB73B20EB9A9BC844413BE9E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1FAFF61D195DD4A90D9BD6FD /* Property.swift */,
+				239E6AFFD27FB46AC69C898D /* PropertySortOption.swift */,
+				C418DFDA81EACC2865ACA425 /* TouristHub.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E2DC348A1F5623F7072DE954 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				4EEBA74C201D2F5F48B41B1B /* AppDependencies.swift */,
+				3FE222E834F4C92AEA0406A4 /* LoadState.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1CF132BEE121FEE9E0743AD6 /* CommuteFlowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C2A655533CAF85E5C5EF96D3 /* Build configuration list for PBXNativeTarget "CommuteFlowTests" */;
+			buildPhases = (
+				89F1D237B54D7B147AC94D98 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8CE0800E41927D026E7ACFD1 /* PBXTargetDependency */,
+			);
+			name = CommuteFlowTests;
+			packageProductDependencies = (
+			);
+			productName = CommuteFlowTests;
+			productReference = 5B5BF37BA376D78C6DAC4D45 /* CommuteFlowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		863E96AA45287F8C11DC7896 /* CommuteFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B05CD248A5BB75E0687A22B /* Build configuration list for PBXNativeTarget "CommuteFlow" */;
+			buildPhases = (
+				FDC65494BCE8F704B91DDD28 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CommuteFlow;
+			packageProductDependencies = (
+			);
+			productName = CommuteFlow;
+			productReference = 361274EAD3EFB8B9D7516681 /* CommuteFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		577F9644127591D1999876DD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 4924680026D60AEDB78E8BA4 /* Build configuration list for PBXProject "CommuteFlow" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = D39FD3F5D5DDDC608B4EB5E9;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 044998047D63A0CE28EFCBEE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				863E96AA45287F8C11DC7896 /* CommuteFlow */,
+				1CF132BEE121FEE9E0743AD6 /* CommuteFlowTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		89F1D237B54D7B147AC94D98 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7220A46040D777D3F156DD2 /* TransitServiceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FDC65494BCE8F704B91DDD28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D75D2BB67B95759A9CA6BCDC /* ApartmentSearchViewModel.swift in Sources */,
+				C38C4220968919B4BF32FF74 /* ApartmentsListPanel.swift in Sources */,
+				91093ED39EAE407197FE6C44 /* ApartmentsMapView.swift in Sources */,
+				086299F69F3067C5A31030CF /* ApartmentsView.swift in Sources */,
+				C4C15064BCE8CBC6FE2120AE /* AppDependencies.swift in Sources */,
+				51B45D11E0307670669378D4 /* CommuteFlowApp.swift in Sources */,
+				A1FE6DBEE891AE6AD0081056 /* LoadState.swift in Sources */,
+				7C93743036A26B82FEDAA269 /* Property.swift in Sources */,
+				BB75C52BFBE11871E0B1A49F /* PropertyCardView.swift in Sources */,
+				667410239970E4938455E02E /* PropertySortOption.swift in Sources */,
+				A27D597A5641E930FAF4834E /* RootTabView.swift in Sources */,
+				D302AB8CE7DF7A59763226C7 /* TouristHub.swift in Sources */,
+				B12B1749C01E7F5296DDEF33 /* TransitService.swift in Sources */,
+				EAF481D9A2BA4143099D26A2 /* TravelConnectivityViewModel.swift in Sources */,
+				2378C1CA1277B6BEA6582E51 /* TravelMapView.swift in Sources */,
+				99D3922F491F1A37340189BE /* TravelView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8CE0800E41927D026E7ACFD1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 863E96AA45287F8C11DC7896 /* CommuteFlow */;
+			targetProxy = 2852F93CFDCC08A28728903F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		05308EC6A08B6A5F4EE65018 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7761185EA1CC45D68B54758 /* Debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_COMMUTEFLOW_ALLOW_DIRECT_GOOGLE = "$(COMMUTEFLOW_ALLOW_DIRECT_GOOGLE)";
+				INFOPLIST_KEY_COMMUTEFLOW_BACKEND_BASE_URL = "$(COMMUTEFLOW_BACKEND_BASE_URL)";
+				INFOPLIST_KEY_COMMUTEFLOW_GOOGLE_API_KEY = "$(COMMUTEFLOW_GOOGLE_API_KEY)";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6A6AD347F4A8B3025C93323B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.commuteflow.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommuteFlow.app/CommuteFlow";
+			};
+			name = Release;
+		};
+		98EC33AF4A29C9F27E471AC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A31E5B32432E42796F17FEE7 /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_COMMUTEFLOW_ALLOW_DIRECT_GOOGLE = "$(COMMUTEFLOW_ALLOW_DIRECT_GOOGLE)";
+				INFOPLIST_KEY_COMMUTEFLOW_BACKEND_BASE_URL = "$(COMMUTEFLOW_BACKEND_BASE_URL)";
+				INFOPLIST_KEY_COMMUTEFLOW_GOOGLE_API_KEY = "$(COMMUTEFLOW_GOOGLE_API_KEY)";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C6DC21DA2E9139CE363A30C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.commuteflow.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.1;
+			};
+			name = Debug;
+		};
+		C7A097731F7A4E6851815387 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.commuteflow.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CommuteFlow.app/CommuteFlow";
+			};
+			name = Debug;
+		};
+		F4C40B9295F351EFB99E9527 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.commuteflow.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4924680026D60AEDB78E8BA4 /* Build configuration list for PBXProject "CommuteFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6DC21DA2E9139CE363A30C5 /* Debug */,
+				F4C40B9295F351EFB99E9527 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7B05CD248A5BB75E0687A22B /* Build configuration list for PBXNativeTarget "CommuteFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05308EC6A08B6A5F4EE65018 /* Debug */,
+				98EC33AF4A29C9F27E471AC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C2A655533CAF85E5C5EF96D3 /* Build configuration list for PBXNativeTarget "CommuteFlowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7A097731F7A4E6851815387 /* Debug */,
+				6A6AD347F4A8B3025C93323B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 577F9644127591D1999876DD /* Project object */;
+}
