@@ -40,22 +40,19 @@ This repo now supports live Google APIs (Places + Directions) with mock fallback
 
 ## Screenshots
 
-Add your captures under `docs/screenshots/` with these filenames:
-
-- `apartments-list.png`
-- `apartment-expanded-journey.png`
-- `travel-list.png`
-- `travel-expanded-journey.png`
 
 ### Apartments
+<img width="200" height="500" alt="Simulator Screenshot - iPhone 16e - 2026-03-13 at 15 15 10" src="https://github.com/user-attachments/assets/6df09f20-993c-433d-8797-8b969eb93a2a" />
 
-![Apartments list](docs/screenshots/apartments-list.png)
-![Apartment journey expanded](docs/screenshots/apartment-expanded-journey.png)
+<img width="200" height="500" alt="Simulator Screenshot - iPhone 16e - 2026-03-13 at 15 15 49" src="https://github.com/user-attachments/assets/a4b3973e-4f16-4e75-9ef1-944375c9c78e" />
+
 
 ### Travel
 
-![Travel listings](docs/screenshots/travel-list.png)
-![Travel journey expanded](docs/screenshots/travel-expanded-journey.png)
+!<img width="200" height="500" alt="Simulator Screenshot - iPhone 16e - 2026-03-13 at 15 17 11" src="https://github.com/user-attachments/assets/c2b07e53-d887-4a7c-a50f-a77212bc8781" />
+
+<img width="200" height="500" alt="Simulator Screenshot - iPhone 16e - 2026-03-13 at 15 17 30" src="https://github.com/user-attachments/assets/1c29affa-2e1d-40e0-ba86-844042a7bdab" />
+
 
 ## File entry points
 
